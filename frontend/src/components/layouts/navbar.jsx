@@ -1,48 +1,59 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import Button from "../ui/button";
-import { FaBars } from "react-icons/fa";
-import { FiX } from "react-icons/fi";
+import { useAccount } from "../../hooks/use-account";
+import { LuMenu, LuX } from "react-icons/lu";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { account } = useAccount();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="sticky top-0 left-0 border-b border-subtle h-16 bg-surface/60 backdrop-blur-md shadow-md z-9999">
-      <div className="max-w-300 h-full mx-auto px-4 flex items-center justify-between">
+    <nav className="sticky top-0 left-0 border-b border-slate-100 h-16 bg-white/80 backdrop-blur-md z-50 shadow-xs">
+      <div className="max-w-7xl h-full mx-auto px-4 flex items-center justify-between">
         <Link
           to="/"
-          className="text-[1.2rem] md:text-2xl font-bold text-primary"
+          className="text-xl md:text-2xl font-black text-[#0d1323] tracking-tight shrink-0"
         >
-          ADBTalent.
+          ADB<span className="text-[#1d4ed8]">Talent.</span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-1 lg:gap-2">
           <NavLinks />
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Link
-            to="/login"
-            className="font-medium rounded-md transition-colors duration-200 cursor-pointer bg-primary text-white hover:bg-primary/80 px-4 py-2.5 text-sm"
+            to={
+              account
+                ? account.user.role === "admin"
+                  ? "/admin"
+                  : "/talent"
+                : "/login"
+            }
+            className="font-bold rounded-xl transition-all duration-200 cursor-pointer bg-primary text-white hover:bg-primary/85 px-4 py-2 text-xs md:text-sm shadow-xs active:scale-95"
           >
-            Sign In
+            {account ? "Dashboard" : "Log In"}
           </Link>
+
           <button
-            className="md:hidden cursor-pointer"
+            className="md:hidden p-2 text-slate-500 hover:text-[#0d1323] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
             onClick={toggleMenu}
             aria-label="Toggle Menu"
           >
-            {isOpen ? <FiX size={22} /> : <FaBars size={22} />}
+            {isOpen ? <LuX size={20} /> : <LuMenu size={20} />}
           </button>
         </div>
 
         <div
-          className={`md:hidden absolute top-18 right-3 w-30 h-auto bg-surface shadow-xl rounded-md z-9999 ${isOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-4 scale-90 pointer-events-none"} transition-all duration-300 ease`}
+          className={`md:hidden absolute top-16 right-4 w-56 bg-white border border-slate-100 shadow-xl rounded-2xl p-1.5 z-50 transition-all duration-300 origin-top-right ${
+            isOpen
+              ? "opacity-100 translate-y-2 scale-100"
+              : "opacity-0 translate-y-0 scale-95 pointer-events-none"
+          }`}
         >
-          <div className="flex flex-col p-1 gap-1">
+          <div className="flex flex-col gap-1">
             <NavLinks onClick={toggleMenu} isMobile />
           </div>
         </div>
@@ -52,11 +63,15 @@ function Navbar() {
 }
 
 const NavLinks = ({ onClick, isMobile }) => {
-  const linkClass = ({ isActive }) => `
-    relative text-sm font-medium p-2.5 transition-colors duration-300
-    ${isMobile && isActive ? "text-white bg-primary rounded-md" : "text-neutral hover:text-primary"}
-    ${isActive ? "text-primary after:absolute after:content-[''] after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-0.75 after:bg-primary" : ""}
-  `;
+  const linkClass = ({ isActive }) => {
+    if (isMobile) {
+      return `block w-full text-left text-sm font-bold px-4 py-3 rounded-xl transition-all
+        ${isActive ? "bg-[#1d4ed8] text-white" : "text-slate-600 hover:bg-slate-50 hover:text-[#0d1323]"}`;
+    }
+
+    return `relative text-sm font-bold px-3 py-2 text-slate-500 hover:text-[#0d1323] transition-colors duration-200 h-16 flex items-center
+      ${isActive ? "text-[#1d4ed8] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#1d4ed8]" : ""}`;
+  };
 
   return (
     <>

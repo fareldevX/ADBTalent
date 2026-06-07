@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { userLogin } from "../../service/auth-service";
-import { getUserProfile } from "../../service/user-service";
+import { userLogin } from "../../services/auth-service";
+import { getUserProfile } from "../../services/user-service";
 import { useNotification } from "../../hooks/use-notification";
 import { useAccount } from "../../hooks/use-account";
 import LoadingSpinner from "../../components/common/loading-spinner";
@@ -22,9 +22,9 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const loginResult = await userLogin(email, password);
+      const res = await userLogin(email, password);
 
-      const accessToken = loginResult.data.accessToken;
+      const accessToken = res.data.accessToken;
       localStorage.setItem("accessToken", accessToken);
 
       const profileResult = await getUserProfile();
@@ -37,7 +37,14 @@ function Login() {
           message: "Login successful.",
         });
 
-        navigate({ to: "/profile" });
+        setEmail("");
+        setPassword("");
+
+        if (profileResult.data.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/talent");
+        }
       }
     } catch (err) {
       const message =
@@ -58,7 +65,7 @@ function Login() {
       <LoadingSpinner
         size="md"
         label="Loading..."
-        className="relative min-h-145 h-full text-primary"
+        className="min-h-145 h-full text-primary"
       />
     );
   }
@@ -84,8 +91,9 @@ function Login() {
             type="email"
             name="email"
             id="email"
-            className="py-2.5 px-4 text-sm border border-semibold rounded-md"
+            className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
             placeholder="name@company.com"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -102,8 +110,9 @@ function Login() {
             type="password"
             name="password"
             id="password"
-            className="py-2.5 px-4 mb-4 text-sm border border-semibold rounded-md"
-            placeholder="Enter your password..."
+            className="py-2.5 px-4 mb-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
+            placeholder="••••••••"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
@@ -123,9 +132,12 @@ function Login() {
           </div>
 
           <div className="flex items-center">
-            <button className="text-sm font-medium text-secondary cursor-pointer">
+            <Link
+              to="/forgot-password"
+              className="text-sm font-medium text-secondary cursor-pointer"
+            >
               Forgot password?
-            </button>
+            </Link>
           </div>
         </div>
 

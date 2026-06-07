@@ -12,7 +12,7 @@ export const verifyToken = (req, res, next) => {
   }
 
   const token = authHeaderStr.split(" ")[1];
-  const secretKey = process.env.JWT_ACCESS_ACCESS;
+  const secretKey = process.env.JWT_ACCESS_SECRET;
 
   if (!secretKey) {
     return res.status(500).json({

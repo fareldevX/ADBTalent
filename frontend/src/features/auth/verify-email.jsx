@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useNotification } from "../../hooks/use-notification";
-import { userVerifyEmail } from "../../service/auth-service";
+import { userVerifyEmail } from "../../services/auth-service";
 import LoadingSpinner from "../../components/common/loading-spinner";
 import Button from "../../components/ui/button";
 import {
@@ -37,7 +37,7 @@ function VerifyEmail() {
           setStatus("success");
           notify({
             type: "success",
-            message: "Email verified successfully!",
+            message: "Email verified successfully",
           });
         }
       } catch (err) {
@@ -45,7 +45,7 @@ function VerifyEmail() {
         console.error("Email verification error", err);
         notify({
           type: "error",
-          message: "Failed to verify email.",
+          message: "Failed to verify email",
         });
       }
     };

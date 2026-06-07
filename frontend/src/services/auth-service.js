@@ -11,7 +11,7 @@ export const userVerifyEmail = async (token) => {
 };
 
 export const userResendLink = async (email) => {
-  const res = await api.post("/auth/resend-verification", email);
+  const res = await api.post("/auth/resend-verification", { email });
   return res.data;
 };
 
@@ -20,12 +20,12 @@ export const userLogin = async (email, password) => {
   return res.data;
 };
 
-// export const forgotPassword = async (email) => {
-//   const res = await api.post("/auth/forgot-password", { email });
-//   return res.data;
-// };
+export const forgotPassword = async (email) => {
+  const res = await api.post("/auth/forgot-password", { email });
+  return res.data;
+};
 
-// export const resetPassword = async (token, password) => {
-//   const res = await api.put(`/auth/reset-password/${token}`, { password });
-//   return res.data;
-// };
+export const resetPassword = async (token, password) => {
+  const res = await api.put(`/auth/reset-password/${token}`, { password });
+  return res.data;
+};

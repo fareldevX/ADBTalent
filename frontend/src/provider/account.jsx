@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { AccountContext } from "../context/account";
-import { getUserProfile } from "../service/user-service";
+import { getUserProfile } from "../services/user-service";
 import LoadingSpinner from "../components/common/loading-spinner";
 
 export function AccountProvider({ children }) {
@@ -35,7 +35,13 @@ export function AccountProvider({ children }) {
   const value = useMemo(() => ({ account, setAccount }), [account]);
 
   if (isInitialLoading)
-    return <LoadingSpinner label="Loading application..." />;
+    return (
+      <LoadingSpinner
+        size="lg"
+        label="Loading Application..."
+        className="h-screen text-primary"
+      />
+    );
 
   return (
     <AccountContext.Provider value={value}>{children}</AccountContext.Provider>

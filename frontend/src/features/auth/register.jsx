@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { userRegister } from "../../service/auth-service";
+import { userRegister } from "../../services/auth-service";
 import { useNotification } from "../../hooks/use-notification";
 import Button from "../../components/ui/button";
 import LoadingSpinner from "../../components/common/loading-spinner";
@@ -9,6 +9,10 @@ import screenRegister from "../../assets/img/screen-register.png";
 
 function Register() {
   const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [headline, setHeadline] = useState("");
+  const [location, setLocation] = useState("");
+  const [about, setAbout] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +36,10 @@ function Register() {
     try {
       const payload = {
         username: name,
+        fullName,
+        headline,
+        location,
+        about,
         email,
         password,
       };
@@ -43,6 +51,14 @@ function Register() {
           type: "success",
           message: "Registered successful.",
         });
+
+        setName("");
+        setFullName("");
+        setHeadline("");
+        setLocation("");
+        setAbout("");
+        setEmail("");
+        setPassword("");
 
         setTimeout(() => {
           notify({
@@ -70,13 +86,13 @@ function Register() {
       <LoadingSpinner
         size="md"
         label="Loading..."
-        className="relative min-h-145 h-full text-primary"
+        className="min-h-145 h-full text-primary"
       />
     );
 
   return (
-    <section className="h-auto py-10 px-4 bg-primary-bg">
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 items-stretch border border-subtle rounded-xl shadow-md overflow-hidden">
+    <section className="h-auto py-18 px-4 bg-primary-bg">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 items-stretch border border-subtle rounded-xl shadow-md overflow-hidden">
         <div className="relative h-full after:absolute after:content-[''] after:top-0 after:left-0 after:right-0 after:h-full after:bg-primary/60">
           <img
             src={screenRegister}
@@ -120,16 +136,89 @@ function Register() {
 
           <div className="flex flex-col items-stretch gap-2">
             <label htmlFor="name" className="text-sm font-medium text-primary">
-              Full Name
+              Name
             </label>
             <input
               type="text"
               name="name"
               id="name"
-              className="py-2.5 px-4 text-sm border border-semibold rounded-md"
-              placeholder="John Doe"
+              className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
+              placeholder="John"
+              value={name}
               onChange={(e) => setName(e.target.value)}
               required
+            />
+          </div>
+
+          <div className="flex flex-col items-stretch gap-2">
+            <label
+              htmlFor="fullName"
+              className="text-sm font-medium text-primary"
+            >
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="fullName"
+              id="fullName"
+              className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
+              placeholder="John Doe"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="flex flex-col items-stretch gap-2">
+            <label
+              htmlFor="headline"
+              className="text-sm font-medium text-primary"
+            >
+              Headline / Title
+            </label>
+            <input
+              type="text"
+              name="headline"
+              id="headline"
+              className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
+              placeholder="Full-Stack Web Developer"
+              value={headline}
+              onChange={(e) => setHeadline(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="flex flex-col items-stretch gap-2">
+            <label
+              htmlFor="location"
+              className="text-sm font-medium text-primary"
+            >
+              Location
+            </label>
+            <input
+              type="text"
+              name="location"
+              id="location"
+              className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
+              placeholder="Tegal, Indonesia"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="flex flex-col items-stretch gap-2">
+            <label htmlFor="about" className="text-sm font-medium text-primary">
+              About
+            </label>
+            <textarea
+              name="about"
+              id="about"
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
+              rows="3"
+              className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
+              placeholder="Tell briefly about yourself..."
             />
           </div>
 
@@ -141,8 +230,9 @@ function Register() {
               type="email"
               name="email"
               id="email"
-              className="py-2.5 px-4 text-sm border border-semibold rounded-md"
+              className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
               placeholder="jhon@company.com"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -159,8 +249,9 @@ function Register() {
               type="password"
               name="password"
               id="password"
-              className="py-2.5 px-4 text-sm border border-semibold rounded-md"
-              placeholder="Enter your Password..."
+              className="py-2.5 px-4 text-sm border border-semibold rounded-md focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all"
+              placeholder="••••••••"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
