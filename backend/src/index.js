@@ -28,3 +28,5 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
+
+export default app;
