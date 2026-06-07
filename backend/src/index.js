@@ -11,9 +11,12 @@ dotenv.config();
 const app = express();
 connectDB();
 
+const allowedOrigin =
+  process.env.FRONTEND_URL || "https://adb-talent.vercel.app";
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [allowedOrigin, allowedOrigin.replace(/\/$/, "")],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
