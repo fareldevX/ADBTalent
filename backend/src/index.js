@@ -13,18 +13,12 @@ connectDB();
 
 app.use(
   cors({
-    origin: ["https://adb-talent.vercel.app", "http://localhost:5173"],
+    origin: process.env.FRONTEND_URL,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "X-Requested-With",
-      "Accept",
-    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-app.options("*", cors());
 app.use(cookieParser());
 app.use(express.json());
 
