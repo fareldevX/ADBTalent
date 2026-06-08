@@ -11,11 +11,35 @@ dotenv.config();
 const app = express();
 connectDB();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+if (process.env.FRONTEND_URL) {
+  const frontendUrl = process.env.FRONTEND_URL.trim();
+  const originUrl = frontendUrl.startsWith("http") ? frontendUrl : `https://${frontendUrl}`;
+  allowedOrigins.push(originUrl);
+}
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, postman)
+      if (!origin) return callback(null, true);
+      
+      const isAllowed = allowedOrigins.includes(origin) || 
+                        origin.endsWith(".vercel.app") || 
+                        /^http:\/\/localhost:\d+$/.test(origin);
+      
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
